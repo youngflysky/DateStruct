@@ -1,3 +1,0 @@
-void SelectSort(LinkList L)
-// {
-// }
