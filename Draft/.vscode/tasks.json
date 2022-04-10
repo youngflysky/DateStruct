@@ -9,6 +9,7 @@
       "command": "C:/MinGW64/bin/g++.exe",
       "args": [ //编译时候的参数
         "-g", //添加gdb调试选项
+        //"${fileDirname}\\*.cpp",
         "${file}",
         "-o", //指定生成可执行文件的名称
         "${workspaceFolder}\\build\\${fileBasenameNoExtension}.exe"
