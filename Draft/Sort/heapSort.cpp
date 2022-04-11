@@ -29,11 +29,11 @@ void Sift(int arr[], int low, int high) //第 1 个节点编号为 0
     int temp = arr[i];
     while (j <= high)
     {
-        if (j < high && arr[j] < arr[j + 1])
+        if (j < high && arr[j] < arr[j + 1]) //定位 j 到左右孩子中较大的一个
         {
             ++j;
         }
-        if (arr[j] > temp)
+        if (arr[j] > temp) // arr【i】 的值已经改变，故必须用 temp
         {
             arr[i] = arr[j];
             i = j;
@@ -44,7 +44,7 @@ void Sift(int arr[], int low, int high) //第 1 个节点编号为 0
             break;
         }
     }
-    arr[i] = temp;
+    arr[i] = temp; //上述循环操作执行后，此处的 arr[i] 实际上是最终的 arr[j]
     return;
 }
 
