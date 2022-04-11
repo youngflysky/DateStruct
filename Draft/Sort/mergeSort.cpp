@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 using namespace std;
 
 //归并排序
@@ -36,7 +36,7 @@ void merge(int arr[], int low, int mid, int high)
     int k = 0;
     for (; i < n1 && j < n2; ++k) //子链归并
     {
-        if (L[i] < R[j])
+        if (L[i] <= R[j]) //判断条件是 < 时，会使 mergeSort 不稳定
         {
             arr[low + k] = L[i++];
         }
