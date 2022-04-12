@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 using namespace std;
 
 void InsertSort(int arr[], int n) //时间复杂度 O(n^2)
@@ -18,19 +18,20 @@ void InsertSort(int arr[], int n) //时间复杂度 O(n^2)
     return;
 }
 
+void Print(const int arr[], const int n)
+{
+    for (int i = 0; i < n; ++i)
+    {
+        cout << arr[i] << ' ';
+    }
+}
 int main()
 {
     int arr[10] = {7, 5, 2, 6, 4, 3, 0, 8, 9, 1};
-    for (int i = 0; i < 10; ++i)
-    {
-        cout << arr[i] << ' ';
-    }
+    Print(arr, 10);
     cout << endl;
     InsertSort(arr, 10);
-    for (int i = 0; i < 10; i++)
-    {
-        cout << arr[i] << ' ';
-    }
+    Print(arr, 10);
     cout << endl;
     return 0;
 }
