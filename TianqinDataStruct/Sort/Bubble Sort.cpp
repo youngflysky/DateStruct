@@ -1,6 +1,18 @@
-#include <iostream>
 #include <cstdlib>
+#include <ctime>
+#include <iostream>
 using namespace std;
+int *getRand(int arr[], int a = 0, int b = 10)
+{
+    srand(time(NULL));
+    for (int i = 0; i < 20; ++i)
+    {
+        arr[i] = rand() % (b - a) + a;
+        cout << arr[i] << ' ';
+    }
+
+    return arr;
+}
 
 //冒泡排序
 
@@ -31,14 +43,11 @@ void BubbleSort(int arr[], int n)
 
 int main()
 {
-    int arr[10] = {7, 5, 2, 6, 4, 3, 0, 8, 9, 1};
-    for (int i = 0; i < 10; ++i)
-    {
-        cout << arr[i] << ' ';
-    }
+    int arr[20];
+    getRand(arr, 0, 20);
     cout << endl;
-    BubbleSort(arr, 10);
-    for (int i = 0; i < 10; i++)
+    BubbleSort(arr, 20);
+    for (int i = 0; i < 20; i++)
     {
         cout << arr[i] << ' ';
     }
