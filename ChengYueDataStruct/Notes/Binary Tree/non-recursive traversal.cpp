@@ -234,6 +234,36 @@ void PostOrderTraversalNo_recursive2(BinTree BT) //模拟法+逆后续
     }
 }
 
+// 4、层次遍历
+void LevelOrderTraversal(BinTree BT)
+{
+    if (!BT)
+    {
+        return;
+    }
+    BinTree queue[maxSize];
+    int front = 0, rear = 0;
+    BinTree T = BT;
+    rear = (rear + 1) % maxSize;
+    queue[rear] = T;
+    while (rear != front)
+    {
+        front = (front + 1) % maxSize;
+        T = queue[front];
+        cout << T->Data;
+        if (T->Left)
+        {
+            rear = (rear + 1) % maxSize;
+            queue[rear] = T->Left;
+        }
+        if (T->Right)
+        {
+            rear = (rear + 1) % maxSize;
+            queue[rear] = T->Right;
+        }
+    }
+}
+
 int main()
 {
     BinTree bt = CreatBinTree();
@@ -255,6 +285,10 @@ int main()
     cout << endl
          << "后序遍历(模拟法+双栈):";
     PostOrderTraversalNo_recursive2(bt); //逆后续
+    cout << endl
+         << endl
+         << "层次遍历(队列):";
+    LevelOrderTraversal(bt);
 
     return 0;
 }
