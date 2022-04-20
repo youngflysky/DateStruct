@@ -48,7 +48,7 @@ BTNode *BSTSearch(BTNode *bt, int key) //递归查找
         }
         else
         {
-            return BSTSearch(bt->lchild, key); // return 的作用 ：逐层将目标 bt 传回主函数；
+            return BSTSearch(bt->lchild, key); // NOTE: return 的作用 ：逐层将目标 bt 传回主函数；
         }
     }
 }
