@@ -17,15 +17,12 @@ void findMaxSum1(int A[], int N)
 				maxSum = thisSum;
 			}
 		}
-
 	}
 	cout << maxSum << endl;
 }
 
 void findMaxSum2(int A[], int K)
 {
-
-
 }
 
 //Ì°ÐÄËã·¨
@@ -46,11 +43,10 @@ void findMaxSum3(int A[], int N)
 		}
 	}
 	cout << maxSum << endl;
-
 }
 
-
-int main() {
+int main()
+{
 
 	int N;
 	cin >> N;

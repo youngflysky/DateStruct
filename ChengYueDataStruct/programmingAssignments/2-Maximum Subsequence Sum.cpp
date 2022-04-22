@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 using namespace std;
 
 void findMaxSum(int *A, int N)
@@ -32,15 +32,14 @@ void findMaxSum(int *A, int N)
 	{
 		cout << maxSum << ' ' << A[left] << ' ' << A[right];
 	}
-
 }
 
-
-int main() {
+int main()
+{
 
 	int N;
 	cin >> N;
-	int *A = (int *)calloc(N, sizeof(int));//calloc()分配的空间会被初始化为0
+	int *A = (int *)calloc(N, sizeof(int)); // calloc()分配的空间会被初始化为0
 	for (int i = 0; i < N; ++i)
 	{
 		cin >> A[i];

@@ -3,13 +3,13 @@
 using namespace std;
 #define maxSize 101
 
-typedef struct TreeNode
+typedef struct TreeNode //二叉树节点定义
 {
     int Data;
     struct TreeNode *Left;
     struct TreeNode *Right;
 } TNode, *BinTree;
-BinTree Insert(int data)
+BinTree Insert(int data) //二叉树节点的插入
 {
     BinTree BT;
     BT = (BinTree)malloc(sizeof(TNode));
@@ -18,7 +18,7 @@ BinTree Insert(int data)
     BT->Right = NULL;
     return BT;
 }
-BinTree CreatBinTree()
+BinTree CreatBinTree() //初始化二叉树
 {
     BinTree BT;
     BT = (BinTree)malloc(sizeof(struct TreeNode));
@@ -33,6 +33,16 @@ BinTree CreatBinTree()
     BT->Right->Left->Right = Insert(8);
     return BT;
 }
+/*
+                 1
+               /   \
+              2     3
+             / \    / \
+            4   6  7   9
+               /    \
+              5      8
+*/
+
 typedef struct StackNode //链栈节点定义
 {
     BinTree T;
@@ -267,27 +277,27 @@ void LevelOrderTraversal(BinTree BT)
 int main()
 {
     BinTree bt = CreatBinTree();
-    cout << "\n中序遍历(路线法):";
+    cout << "\nInOrderRraversal(route method):" << endl;
     InOrderTraversalNo_recursive1(bt);
     cout << endl
-         << "中序遍历不适合模拟法";
+         << "simulation method isn't suitable for InOrderTraversal";
     cout << endl
          << endl
-         << "先序遍历(路线法):";
+         << "PreOrderTraversal(route method):" << endl;
     PreOrderTraversalNo_recursive1(bt);
     cout << endl
-         << "先序遍历(模拟法):";
+         << "PreOrderTraversal(simulation method):" << endl;
     PreOrderTraversalNo_recursive2(bt);
     cout << endl
          << endl
-         << "后序遍历(路线法-单栈):";
+         << "PostOrderTraversal(route method - single stack):" << endl;
     PostOrderTraversalNo_recursive1(bt);
     cout << endl
-         << "后序遍历(模拟法+双栈):";
+         << "PostOrderTraversal(simulation method + double stack):" << endl;
     PostOrderTraversalNo_recursive2(bt); //逆后续
     cout << endl
          << endl
-         << "层次遍历(队列):";
+         << "LevelOrderTraversal(Queue):" << endl;
     LevelOrderTraversal(bt);
 
     return 0;
