@@ -2,14 +2,14 @@
 #include <iostream>
 using namespace std;
 
-typedef struct TNode //二叉树节点定义
+typedef struct TNode // Binary tree node definition
 {
     char ch;
     struct TNode *left;
     struct TNode *right;
 } TNode, *BinTree;
 
-BinTree Insert(char ch) //插入新节点
+BinTree Insert(char ch) // insert new node
 {
     BinTree T;
     T = new TNode;
@@ -19,14 +19,14 @@ BinTree Insert(char ch) //插入新节点
     return T;
 }
 
-typedef struct ReadNode //节点编号数组节点
+typedef struct ReadNode // Array node storing binary tree nodes
 {
     char ch;
     int leftIndex = -1;
     int rightIndex = -1;
 } ReadNode;
 
-ReadNode *getNode(int N) //读入所有树的节点并存进数组 NodeArray[N]
+ReadNode *getNode(int N) // Read in all tree nodes and store in an array NodeArray[N]
 {
     ReadNode *NodeArray;
     NodeArray = new ReadNode[N];
@@ -46,7 +46,7 @@ ReadNode *getNode(int N) //读入所有树的节点并存进数组 NodeArray[N]
     return NodeArray;
 }
 
-BinTree buildTree(const ReadNode *readArray, int N) //建树
+BinTree buildTree(const ReadNode *readArray, int N) // build tree
 {
     TNode *TArray;
     TArray = new TNode[N];
