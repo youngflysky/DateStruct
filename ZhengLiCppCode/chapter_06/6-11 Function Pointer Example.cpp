@@ -3,35 +3,39 @@
 #include <iostream>
 using namespace std;
 
-void printStuff(float)
+typedef int (*cacuP)(int, int); // NOTE:通过 typedef 能够简化指针函数的定义
+
+int compute(int a, int b, cacuP func) // README:使用指针函数作为函数形参
 {
-	cout << "This is the print stuff function." << endl;
+	return func(a, b);
 }
 
-void printMessage(float data)
+int max(int a, int b) // 求最大值
 {
-	cout << "The data to be listed is " << data << endl;
+	return ((a > b) ? a : b);
 }
-
-void printFloat(float data)
+int min(int a, int b) // 求最小值
 {
-	cout << "The data to be printed is " << data << endl;
+	return ((a < b) ? a : b);
 }
-
-const float PI = 3.14159f;
-const float TWO_PI = PI * 2.0f;
+int sum(int a, int b) // 求和
+{
+	return a + b;
+}
 
 int main()
-{									//主函数
-	void (*functionPointer)(float); //函数指针
-	printStuff(PI);
-	functionPointer = printStuff;	//函数指针指向printStuff
-	functionPointer(PI);			//函数指针调用
-	functionPointer = printMessage; //函数指针指向printMessage
-	functionPointer(TWO_PI);		//函数指针调用
-	functionPointer(13.0);			//函数指针调用
-	functionPointer = printFloat;	//函数指针指向printFloat
-	functionPointer(PI);			//函数指针调用
-	printFloat(PI);
-	return 0;
+{
+
+	int a, b, res;
+	cout << "请输入整数a：";
+	cin >> a;
+	cout << "请输入整数b：";
+	cin >> b;
+
+	res = compute(a, b, &max);
+	cout << "Max of " << a << " and " << b << " is " << res << endl;
+	res = compute(a, b, &min);
+	cout << "Min of " << a << " and " << b << " is " << res << endl;
+	res = compute(a, b, &sum);
+	cout << "Sum of " << a << " and " << b << " is " << res << endl;
 }
