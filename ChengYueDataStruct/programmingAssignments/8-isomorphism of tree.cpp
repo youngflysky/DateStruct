@@ -4,135 +4,85 @@
 using namespace std;
 #define Null -1
 
-typedef struct TNode // Array node storing binary tree nodes
+struct TNode // Directly define two static linked lists that store binary trees
 {
     char ch;
     int left = Null;
     int right = Null;
-} TNode, *Tree;
+} T1[10], T2[10];
+typedef TNode *Tree;
 
-int buildTree(Tree T, int N) // Read in all tree nodes and store in an array NodeArray[N]
+int buildTree(Tree T) // Store all node information in a static linked list and return the subscript of the root node;
 {
+    int N;
+    cin >> N;
+    if (N == 0)
+    {
+        return Null;
+    }
     char l, r;
-    int *check = new int[N]();
+    int R = 0;
     for (int i = 0; i < N; ++i)
     {
         cin >> T[i].ch >> l >> r;
         if (l != '-')
         {
             T[i].left = l - '0';
-            check[T[i].left] = 1;
+            R -= T[i].left;
         }
         if (r != '-')
         {
             T[i].right = r - '0';
-            check[T[i].right] = 1;
+            R -= T[i].right;
         }
+        R += i;
     }
-    int root = 0;
-    for (root = 0; root < N; ++root)
-    {
-        if (!check[root])
-        {
-            break;
-        }
-    }
-    return root;
+    return R;
 }
-bool isSameStruct(const Tree T1, int root1, const Tree T2, int root2)
+
+bool isomorphic(int R1, int R2) // Use recursive function to determine whether a binary tree is isomorphic
 {
-    if (root1 == Null && root2 == Null)
+    if (R1 == Null && R2 == Null) // both Null;
     {
         return true;
     }
-    else if (root1 == Null || root2 == Null)
+    else if (R1 == Null || R2 == Null) // one is Null,and the other isn't
     {
         return false;
     }
-    else if (T1[root1].ch != T2[root2].ch)
+    else if (T1[R1].ch != T2[R2].ch) // the data isn't same;
     {
         return false;
     }
     else
     {
-        int l1 = T1[root1].left, r1 = T1[root1].right;
-        int l2 = T2[root2].left, r2 = T2[root2].right;
-        if (l1 == Null && l2 == Null) // l-l:Null;
+        int l1 = T1[R1].left, r1 = T1[R1].right;
+        int l2 = T2[R2].left, r2 = T2[R2].right;
+        // NOTE: only two recursive input formats,so as long as one condition is written in full
+        if ((l1 == Null && l2 == Null) || (l1 != Null && l2 != Null) && (T1[l1].ch == T2[l2].ch))
         {
-            return isSameStruct(T1, r1, T2, r2);
-        }
-        else if (l1 == Null && r2 == Null) // l-r:Null;
-        {
-            return isSameStruct(T1, r1, T2, l2);
-        }
-        else if (r1 == Null && l2 == Null) // r-l:Null;
-        {
-            return isSameStruct(T1, l1, T2, r2);
-        }
-        else if (r1 == Null && r2 == Null) // r-r:Null;
-        {
-            return isSameStruct(T1, l1, T2, l2);
-        }
-        else if (T1[l1].ch == T2[l2].ch)
-        {
-            if (isSameStruct(T1, l1, T2, l2) && isSameStruct(T1, r1, T2, r2))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (isomorphic(l1, l2) && isomorphic(r1, r2));
         }
         else
         {
-            if (isSameStruct(T1, l1, T2, r2) && isSameStruct(T1, r1, T2, l2))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (isomorphic(l1, r2) && isomorphic(r1, l2));
         }
     }
 }
 
 int main()
 {
-    int N1;
-    cin >> N1;
-    Tree T1;
-    int root1;
-    if (N1)
-    {
-        T1 = new TNode[N1]();
-        root1 = buildTree(T1, N1);
-    }
-
-    int N2;
-    cin >> N2;
-    Tree T2;
-    int root2;
-    if (N2)
-    {
-        T2 = new TNode[N2]();
-        root2 = buildTree(T2, N2);
-    }
-
-    if (N1 == 0 && N2 == 0)
+    int R1, R2;
+    R1 = buildTree(T1);
+    R2 = buildTree(T2);
+    if (isomorphic(R1, R2))
     {
         cout << "Yes\n";
-        return 0;
     }
-    else if (N1 && N2)
+    else
     {
-        if (isSameStruct(T1, root1, T2, root2))
-        {
-            cout << "Yes\n";
-            return 0;
-        }
+        cout << "No";
     }
-    cout << "No\n";
+
     return 0;
 }
