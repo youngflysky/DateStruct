@@ -42,7 +42,7 @@ public:
 		delete[] points;
 	}
 	//获得下标为index的数组元素
-	Point &element(int index)
+	Point &element(int index) // NOTE:引用型函数，直接返回被操作数别名
 	{
 		assert(index >= 0 && index < size); //如果数组下标越界，程序中止
 		return points[index];
