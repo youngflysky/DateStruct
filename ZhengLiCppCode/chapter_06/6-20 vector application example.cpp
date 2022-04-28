@@ -24,6 +24,12 @@ int main()
 	for (unsigned i = 0; i < n; i++)
 		cin >> arr[i];
 
+	for (auto i : arr)
+	{
+		cout << i;
+	}
+	cout << endl;
+
 	cout << "Average=" << average(arr) << endl;
 	return 0;
 }

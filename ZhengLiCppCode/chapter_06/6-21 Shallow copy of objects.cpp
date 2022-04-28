@@ -36,6 +36,14 @@ public:
 	{
 		points = new Point[size];
 	}
+	ArrayOfPoints(const ArrayOfPoints &v) : size(v.size)
+	{
+		points = new Point[size];
+		for (int i = 0; i < size; ++i)
+		{
+			points[i] = v.points[i];
+		}
+	}
 	~ArrayOfPoints()
 	{
 		cout << "Deleting..." << endl;
