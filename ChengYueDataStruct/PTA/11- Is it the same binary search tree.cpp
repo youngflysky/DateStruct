@@ -81,6 +81,17 @@ bool IsSameBST(const BinTree BST, const BinTree initialBST) //先序遍历确定
     }
 }
 
+void DeleteBT(BinTree &BST) // delete BinTree;
+{
+    if (BST)
+    {
+        DeleteBT(BST->Left);
+        DeleteBT(BST->Right);
+        delete BST;
+        BST = NULL;
+    }
+}
+
 int main()
 {
     vector<bool> result; // NOTE: vector 容器储存结果！！！
@@ -93,7 +104,9 @@ int main()
         {
             BST = CreateBST();
             result.push_back(IsSameBST(BST, initialBST));
+            DeleteBT(BST);
         }
+        DeleteBT(initialBST);
     }
     for (int i = 0; i < result.size(); ++i)
     {
