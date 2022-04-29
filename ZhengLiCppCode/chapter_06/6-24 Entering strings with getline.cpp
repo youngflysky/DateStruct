@@ -1,4 +1,4 @@
-//Àı6-24.cpp ÓÃgetlineÊäÈë×Ö·û´®
+//ä¾‹6-24.cpp ç”¨getlineè¾“å…¥å­—ç¬¦ä¸²
 
 #include <iostream>
 #include <string>
@@ -6,12 +6,9 @@ using namespace std;
 
 int main()
 {
-	for (int i = 0; i < 2; i++)
-	{
-		string city, state;
-		getline(cin, city, ',');
-		getline(cin, state);
-		cout << "City: " << city << "  State: " << state << endl;
-	}
+	string exp;
+	getline(cin, exp, '=');
+	cout << exp.length() << endl
+		 << exp;
 	return 0;
 }
