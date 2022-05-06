@@ -6,94 +6,94 @@ typedef int ElementType;
 typedef struct HeapStruct *MaxHeap;
 struct HeapStruct
 {
-	ElementType *Elements; // ´æ´¢¶ÑÔªËØµÄÊı×é
-	int Size;			   // ¶ÑµÄµ±Ç°ÔªËØ¸öÊı
-	int Capacity;		   // ¶ÑµÄ×î´óÈİÁ¿
+	ElementType *Elements; // å­˜å‚¨å †å…ƒç´ çš„æ•°ç»„
+	int Size;			   // å †çš„å½“å‰å…ƒç´ ä¸ªæ•°
+	int Capacity;		   // å †çš„æœ€å¤§å®¹é‡
 };
 
-MaxHeap Create(int MaxSize);			  // ½¨¶Ñ
-bool IsFull(MaxHeap H);					  // ÅĞ¶Ï¶ÑÊÇ·ñÂú
-bool Insert(MaxHeap H, ElementType item); // ²åÈëÔªËØ
-bool IsEmpty(MaxHeap H);				  //  ÅĞ¶Ï¶ÑÊÇ·ñÎª¿Õ
-ElementType DeleteMax(MaxHeap H);		  // É¾³ı²¢·µ»Ø¶ÑÖĞ×î´óÔªËØ
-void LevelOrderTraversal(MaxHeap H);	  // ²ãĞò±éÀú
+MaxHeap Create(int MaxSize);			  // å»ºå †
+bool IsFull(MaxHeap H);					  // åˆ¤æ–­å †æ˜¯å¦æ»¡
+bool Insert(MaxHeap H, ElementType item); // æ’å…¥å…ƒç´ 
+bool IsEmpty(MaxHeap H);				  //  åˆ¤æ–­å †æ˜¯å¦ä¸ºç©º
+ElementType DeleteMax(MaxHeap H);		  // åˆ é™¤å¹¶è¿”å›å †ä¸­æœ€å¤§å…ƒç´ 
+void LevelOrderTraversal(MaxHeap H);	  // å±‚åºéå†
 
-// ½¨¶Ñ
+// å»ºå †
 MaxHeap Create(int MaxSize)
 {
 	MaxHeap H = (MaxHeap)malloc(sizeof(struct HeapStruct));
-	// Elements[0] ×÷ÎªÉÚ±ø£¬¶ÑÔªËØ´Ó  Elements[1] ¿ªÊ¼´æ·Å
+	// Elements[0] ä½œä¸ºå“¨å…µï¼Œå †å…ƒç´ ä»  Elements[1] å¼€å§‹å­˜æ”¾
 	H->Elements = (ElementType *)malloc((MaxSize + 1) * sizeof(ElementType));
 	H->Size = 0;
 	H->Capacity = MaxSize;
-	// "ÉÚ±ø"´óÓÚ¶ÑÖĞËùÓĞ¿ÉÄÜµÄÖµ
+	// "å“¨å…µ"å¤§äºå †ä¸­æ‰€æœ‰å¯èƒ½çš„å€¼
 	H->Elements[0] = MaxData;
 	return H;
 }
 
-// ²åÈë£¬´ÓÍêÈ«¶ş²æÊ÷µÄ×îºóÒ»¸öÎ»ÖÃ²åÈë
+// æ’å…¥ï¼Œä»å®Œå…¨äºŒå‰æ ‘çš„æœ€åä¸€ä¸ªä½ç½®æ’å…¥
 bool Insert(MaxHeap H, ElementType item)
 {
 	if (IsFull(H))
 	{
-		printf("¶ÑÒÑÂú£¬ÎŞ·¨²åÈë£¡\n");
+		printf("å †å·²æ»¡ï¼Œæ— æ³•æ’å…¥ï¼\n");
 		return false;
 	}
-	int i = ++H->Size;						  // Ö¸Ïò¶ÑÖĞ×îºóÒ»¸öÎ»ÖÃ
-	for (; H->Elements[i / 2] < item; i /= 2) // ÏòÉÏÕÒ±È item ´óµÄ½áµã
-		H->Elements[i] = H->Elements[i / 2];  //  ÏòÏÂ¸³Öµ
-	H->Elements[i] = item;					  // ÕÒµ½ÁË£¬°Ñ item Öµ·Å½øÈ¥
+	int i = ++H->Size;						  // æŒ‡å‘å †ä¸­æœ€åä¸€ä¸ªä½ç½®
+	for (; H->Elements[i / 2] < item; i /= 2) // å‘ä¸Šæ‰¾æ¯” item å¤§çš„ç»“ç‚¹
+		H->Elements[i] = H->Elements[i / 2];  //  å‘ä¸‹èµ‹å€¼
+	H->Elements[i] = item;					  // æ‰¾åˆ°äº†ï¼ŒæŠŠ item å€¼æ”¾è¿›å»
 	return true;
 }
 
-// É¾³ı£¬´Ó¸ù½áµãÉ¾³ı
+// åˆ é™¤ï¼Œä»æ ¹ç»“ç‚¹åˆ é™¤
 ElementType DeleteMax(MaxHeap H)
 {
 	int parent, child;
 	ElementType Max, tmp;
 	if (IsEmpty(H))
 	{
-		printf("¶ÑÎª¿Õ£¬ÎŞ·¨É¾³ı£¡\n");
+		printf("å †ä¸ºç©ºï¼Œæ— æ³•åˆ é™¤ï¼\n");
 		return ERROR;
 	}
-	Max = H->Elements[1];		  // ÄÃµ½×î´óÖµ
-	tmp = H->Elements[H->Size--]; // ÄÃµ½ÍêÈ«¶ş²æÊ÷×îºóÒ»¸öÖµ
-	// ÅĞ±ğÌõ¼ş£ºparent ÊÇ·ñÓĞ×óº¢×Ó½áµã
+	Max = H->Elements[1];		  // æ‹¿åˆ°æœ€å¤§å€¼
+	tmp = H->Elements[H->Size--]; // æ‹¿åˆ°å®Œå…¨äºŒå‰æ ‘æœ€åä¸€ä¸ªå€¼
+	// åˆ¤åˆ«æ¡ä»¶ï¼šparent æ˜¯å¦æœ‰å·¦å­©å­ç»“ç‚¹
 	for (parent = 1; parent * 2 <= H->Size; parent = child)
 	{
-		// ×óÓÒº¢×Ó½áµãÖĞÕÒ½Ï´óµÄÖµ
-		child = 2 * parent; // ×óº¢×Ó½áµã
-		// child!=H->Size ±íÊ¾ child ²»Îªµ±Ç°×îºóÒ»¸ö½áµã£¬¼´ parent ÓĞÓÒº¢×Ó½áµã
+		// å·¦å³å­©å­ç»“ç‚¹ä¸­æ‰¾è¾ƒå¤§çš„å€¼
+		child = 2 * parent; // å·¦å­©å­ç»“ç‚¹
+		// child!=H->Size è¡¨ç¤º child ä¸ä¸ºå½“å‰æœ€åä¸€ä¸ªç»“ç‚¹ï¼Œå³ parent æœ‰å³å­©å­ç»“ç‚¹
 		if ((child != H->Size) && (H->Elements[child] < H->Elements[child + 1]))
 			child++;
-		// ¸ø tmp ÕÒ¸öºÏÊÊµÄÎ»ÖÃ
-		// Èç¹ûµ±Ç°×óÓÒº¢×Ó½áµã±È tmp ¶¼Ğ¡£¬ËµÃ÷ tmp Î»ÖÃÒÑ¾­ºÏÊÊ
+		// ç»™ tmp æ‰¾ä¸ªåˆé€‚çš„ä½ç½®
+		// å¦‚æœå½“å‰å·¦å³å­©å­ç»“ç‚¹æ¯” tmp éƒ½å°ï¼Œè¯´æ˜ tmp ä½ç½®å·²ç»åˆé€‚
 		if (H->Elements[child] <= tmp)
 			break;
-		else // ·ñÔò°Ñ½Ï´óµÄº¢×Ó½áµãÌáÉÏÀ´£¬×Ô¼º¼ÌĞøÏÂÈ¥ÕÒ
+		else // å¦åˆ™æŠŠè¾ƒå¤§çš„å­©å­ç»“ç‚¹æä¸Šæ¥ï¼Œè‡ªå·±ç»§ç»­ä¸‹å»æ‰¾
 			H->Elements[parent] = H->Elements[child];
 	}
-	H->Elements[parent] = tmp; // ÔÚºÏÊÊµÄÎ»ÖÃ°Ñ tmp ·Å½øÈ¥
+	H->Elements[parent] = tmp; // åœ¨åˆé€‚çš„ä½ç½®æŠŠ tmp æ”¾è¿›å»
 	return Max;
 }
 
-// ÅĞ¶ÏÊÇ·ñÒÑ¾­Âú
+// åˆ¤æ–­æ˜¯å¦å·²ç»æ»¡
 bool IsFull(MaxHeap H)
 {
 	return (H->Size == H->Capacity);
 }
 
-// ÅĞ¶ÏÊÇ·ñÎª¿Õ
+// åˆ¤æ–­æ˜¯å¦ä¸ºç©º
 bool IsEmpty(MaxHeap H)
 {
 	return !H->Size;
 }
 
-// ²ãĞò±éÀú
+// å±‚åºéå†
 void LevelOrderTraversal(MaxHeap H)
 {
 	int i;
-	printf("²ãĞò±éÀúµÄ½á¹ûÊÇ£º");
+	printf("å±‚åºéå†çš„ç»“æœæ˜¯ï¼š");
 	for (i = 1; i <= H->Size; i++)
 	{
 		printf("%d ", H->Elements[i]);
