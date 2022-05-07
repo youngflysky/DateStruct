@@ -100,7 +100,7 @@ BinTree Delete(ElementType X, BinTree BST)
 		else
 		{ // 被删除结点只有一个孩子结点或没有孩子结点
 			tmp = BST;
-			else if (!BST->Right) // 只有左孩子结点
+			if (!BST->Right) // 只有左孩子结点
 				BST = BST->Left;
 			else if (!BST->Left) // 只有右孩子结点
 				BST = BST->Right;

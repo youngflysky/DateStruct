@@ -1,85 +1,93 @@
-#include<iostream>
-#include<malloc.h>
-const int MinData = -100000;  // ÉÚ±øÖµ
-const int MaxSize = 1005;   // ×î´ó¸öÊı 
+#include <iostream>
+#include <malloc.h>
+const int MinData = -100000; // å“¨å…µå€¼
+const int MaxSize = 1005;	 // æœ€å¤§ä¸ªæ•°
 using namespace std;
 typedef struct HeapStruct *Heap;
-struct HeapStruct{
-	int *data;   // ´æÖµµÄÊı×é 
-	int size;   // µ±Ç°ÔªËØ¸öÊı 
-	int capacity;  // ×î´óÈİÁ¿ 
+struct HeapStruct
+{
+	int *data;	  // å­˜å€¼çš„æ•°ç»„
+	int size;	  // å½“å‰å…ƒç´ ä¸ªæ•°
+	int capacity; // æœ€å¤§å®¹é‡
 };
 
-// ³õÊ¼»¯¶Ñ
-Heap Create(){
+// åˆå§‹åŒ–å †
+Heap Create()
+{
 	Heap H;
 	H = (Heap)malloc(sizeof(struct HeapStruct));
-	H->data = (int *)malloc(sizeof(int) * (MaxSize+1));
+	H->data = (int *)malloc(sizeof(int) * (MaxSize + 1));
 	H->size = 0;
 	H->capacity = MaxSize;
 	H->data[0] = MinData;
 	return H;
-} 
+}
 
-// ÅÅĞò£¬ÀàËÆ¶ÑµÄ"É¾³ı²Ù×÷" 
-void sort(Heap H,int i){
-	int child,parent;
-	int tmp = H->data[i];  // ÄÃµ½µ±Ç°"¸ù½áµãµÄÖµ" 
-	for(parent = i;parent*2<=H->size;parent = child){
+// æ’åºï¼Œç±»ä¼¼å †çš„"åˆ é™¤æ“ä½œ"
+void sort(Heap H, int i)
+{
+	int child, parent;
+	int tmp = H->data[i]; // æ‹¿åˆ°å½“å‰"æ ¹ç»“ç‚¹çš„å€¼"
+	for (parent = i; parent * 2 <= H->size; parent = child)
+	{
 		child = 2 * parent;
-		if((child!=H->size) && (H->data[child+1] < H->data[child]))
+		if ((child != H->size) && (H->data[child + 1] < H->data[child]))
 			child++;
-		if(H->data[child] >= tmp)
+		if (H->data[child] >= tmp)
 			break;
 		else
-			H->data[parent] = H->data[child]; 
+			H->data[parent] = H->data[child];
 	}
 	H->data[parent] = tmp;
 }
-// µ÷Õû
-void adjust(Heap H){
-	int i= H->size/2;
-	for(;i>0;i--){
-		// ÒÔÃ¿¸öÓĞº¢×Ó½áµãµÄ½áµã×÷Îª¸ù½áµã£¬¶ÔÆä×ÓÊ÷½øĞĞ¶ÑÅÅĞò 
-		sort(H,i);
+// è°ƒæ•´
+void adjust(Heap H)
+{
+	int i = H->size / 2;
+	for (; i > 0; i--)
+	{
+		// ä»¥æ¯ä¸ªæœ‰å­©å­ç»“ç‚¹çš„ç»“ç‚¹ä½œä¸ºæ ¹ç»“ç‚¹ï¼Œå¯¹å…¶å­æ ‘è¿›è¡Œå †æ’åº
+		sort(H, i);
 	}
-} 
-
-// ±éÀú 
-void bl(Heap H){
-	for(int i=1;i<=H->size;i++){
-		cout<<H->data[i]<<" ";
-	}
-	cout<<endl;
 }
 
+// éå†
+void bl(Heap H)
+{
+	for (int i = 1; i <= H->size; i++)
+	{
+		cout << H->data[i] << " ";
+	}
+	cout << endl;
+}
 
-int main(){
+int main()
+{
 	Heap H;
 	H = Create();
 	int n;
-	cin>>n;
-	for(int i=0;i<n;i++)
-		cin>>H->data[++H->size];
+	cin >> n;
+	for (int i = 0; i < n; i++)
+		cin >> H->data[++H->size];
 	adjust(H);
-	bl(H); 
+	bl(H);
 	return 0;
 }
 
 /*
 #include<iostream>
 #include<malloc.h>
-const int MinData = -100000;  // ÉÚ±øÖµ
-const int MaxSize = 1005;   // ×î´ó¸öÊı 
+const int MinData = -100000;  // å“¨å…µå€¼
+const int MaxSize = 1005;   // æœ€å¤§ä¸ªæ•°
 using namespace std;
 typedef struct HeapStruct *Heap;
 struct HeapStruct{
-	int *data;   // ´æÖµµÄÊı×é 
-	int size;   // µ±Ç°ÔªËØ¸öÊı 
-	int capacity;  // ×î´óÈİÁ¿ 
+	int *data;   // å­˜å€¼çš„æ•°ç»„
+	int size;   // å½“å‰å…ƒç´ ä¸ªæ•°
+	int capacity;  // æœ€å¤§å®¹é‡
 };
 
-// ³õÊ¼»¯¶Ñ
+// åˆå§‹åŒ–å †
 Heap Create(){
 	Heap H;
 	H = (Heap)malloc(sizeof(struct HeapStruct));
@@ -88,17 +96,17 @@ Heap Create(){
 	H->capacity = MaxSize;
 	H->data[0] = MinData;
 	return H;
-} 
+}
 
-// ²åÈë
+// æ’å…¥
 void Insert(Heap H,int x){
-	int i = ++H->size;  // Ö¸ÏòÊı×é×îºóÒ»¸ö 
+	int i = ++H->size;  // æŒ‡å‘æ•°ç»„æœ€åä¸€ä¸ª
 	for(;H->data[i/2]>x;i/=2)
 		H->data[i] = H->data[i/2];
 	H->data[i] = x;
-} 
+}
 
-// ±éÀú 
+// éå†
 void bl(Heap H){
 	for(int i=1;i<=H->size;i++)
 		cout<<H->data[i];
@@ -116,5 +124,5 @@ int main(){
 	}
 	bl(H);
 	return 0;
-} 
-*/ 
+}
+*/
