@@ -8,77 +8,46 @@ using namespace std;
 #define Radius 7.5
 
 int Nv, Jump;
-class Point
+typedef struct GraphNode
 {
-private:
+
     int x, y;
-
-public:
-    static int Jump;
-    static void IniteJump(int J = 0)
+    bool isFirstV, isLastV;
+    bool IsFirstV()
     {
-        Jump = J;
-        return;
+        return (Jump + Radius) * (Jump + Radius) >= x * x + y * y;
     }
-
-public:
-    Point() : x(0), y(0) {}
-    ~Point() {}
-    void GetPoint()
+    bool IsLastV()
+    {
+        return abs(x) + Jump >= 50 || abs(y) + Jump >= 50;
+    }
+    bool IniteV()
     {
         cin >> x >> y;
+        isFirstV = IsFirstV();
+        isLastV = IsLastV();
     }
-    bool FirstJump()
-    {
-        if ((Jump + Radius) * (Jump + Radius) > x * x + y * y)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    bool IsSafe()
-    {
-        if (Jump >= (50 - abs(x)) || Jump >= (50 - abs(y)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    bool CanJump(Point &p)
-    {
-        if (Jump * Jump >= pow(x - p.x, 2) + pow(y - p.y, 2))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-};
-int Point::Jump = 0;
-Point Graph[maxSize];
+} GraphNode;
+GraphNode GNode[maxSize];
 int Visited[maxSize] = {0};
+
+bool CanJump(int p1, int p2) //判断 James 是否可以从 P1 跳到 P2;
+{
+    return (GNode[p1].x - GNode[p2].x) * (GNode[p1].x - GNode[p2].x) + (GNode[p1].y - GNode[p2].y) * (GNode[p1].y - GNode[p2].y) <= Jump * Jump;
+}
 
 void BuildGraph()
 {
-    Point::IniteJump(Jump);
     for (int i = 0; i < Nv; ++i)
     {
-        Graph[i].GetPoint();
+        GNode[i].IniteV();
     }
 }
 
 bool DFS(int n)
 {
     Visited[n] = 1;
-    if (Graph[n].IsSafe())
+    if (GNode[n].isLastV)
     {
         return true;
     }
@@ -87,7 +56,7 @@ bool DFS(int n)
         bool Safe = false;
         for (int i = 0; i < Nv && !Safe; ++i)
         {
-            if (!Visited[i] && Graph[i].CanJump(Graph[n]))
+            if (!Visited[i] && CanJump(n, i))
             {
                 Safe = DFS(i);
             }
@@ -101,7 +70,7 @@ bool Save007()
     bool Safe = false;
     for (int i = 0; i < Nv && !Safe; ++i)
     {
-        if (!Visited[i] && Graph[i].FirstJump())
+        if (!Visited[i] && GNode[i].isFirstV)
         {
             Safe = DFS(i);
         }
