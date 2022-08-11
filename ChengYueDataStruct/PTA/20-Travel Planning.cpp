@@ -1,4 +1,4 @@
-// TITLE:23-旅游规划
+// TITLE:旅游规划
 #include <iostream>
 using namespace std;
 #define MaxSize 501
