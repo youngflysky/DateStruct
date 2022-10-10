@@ -7,57 +7,54 @@
 #include <vector>
 using namespace std;
 
-void GetNextVal(int nextval[], int N, string s)
+int *GetNext(string T)
 {
-    nextval[0] = 0;
+    int N = T.length();
+    int *next = (int *)malloc(sizeof(int) * N);
+    next[0] = 0;
     if (N < 2)
     {
-        return;
+        return next;
     }
     for (int i = 0, j; i < N - 1; ++i)
     {
         j = i + 1;
-        if (s[j] == s[nextval[i]])
+        if (T[j] == T[next[i]])
         {
-            nextval[j] = nextval[i] + 1;
+            next[j] = next[i] + 1;
         }
         else
         {
-            nextval[j] = 0;
+            next[j] = 0;
         }
     }
+    return next;
 }
 
-int KMP(string OriStr, string PatStr)
+int KMP(string S, string T)
 {
-    int MaxSize = OriStr.length();
-    int N = PatStr.length();
-    if (N > MaxSize)
-    {
-        return -1;
-    }
-    int *nextval = (int *)malloc(sizeof(int) * N);
-
-    GetNextVal(nextval, N, PatStr);
+    int lenS = S.length();
+    int lenT = T.length();
+    int *next = GetNext(T);
 
     for (int p = 0, i = 0;;)
     {
-        for (; OriStr[p] == PatStr[i]; ++p, ++i)
+        for (; S[p] == T[i]; ++p, ++i)
         {
-            if (p < MaxSize && i == N - 1)
+            if (p < lenS && i == lenT - 1)
             {
-                return p + 1 - N;
+                return p + 1 - lenT;
             }
-            else if (p == MaxSize - 1 && i < N - 1)
+            else if (p == lenS - 1 && i < lenT - 1)
             {
                 return -1;
             }
         }
         if (i)
         {
-            i = nextval[i - 1];
+            i = next[i - 1];
         }
-        else if (++p == MaxSize)
+        else if (++p == lenS)
         {
             return -1;
         }
@@ -81,6 +78,11 @@ int main()
     for (int i = 0; i < N; ++i)
     {
         string PatStr = VecPatStr[i];
+        if (PatStr.length() > OriStr.length())
+        {
+            cout << "Not Found" << endl;
+            continue;
+        }
         int flag = KMP(OriStr, PatStr);
         if (flag == -1)
         {
