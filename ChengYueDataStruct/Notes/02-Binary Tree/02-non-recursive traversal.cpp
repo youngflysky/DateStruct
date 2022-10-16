@@ -1,38 +1,58 @@
+#include <algorithm>
+#include <cmath>
 #include <cstdlib>
+#include <iomanip>
 #include <iostream>
+#include <queue>
+#include <stack>
+#include <vector>
 using namespace std;
-#define maxSize 101
 
-typedef struct TreeNode //二叉树节点定义
+typedef struct TreeNode *BinTree;
+struct TreeNode
 {
-    int Data;
-    struct TreeNode *Left;
-    struct TreeNode *Right;
-} TNode, *BinTree;
-BinTree Insert(int data) //二叉树节点的插入
+    int data;      // 存值
+    BinTree left;  // 左儿子结点
+    BinTree right; // 右儿子结点
+};
+BinTree CreatBinTree();              // 创建一个二叉树
+BinTree Insert(int val);             //插入一个节点;
+bool IsEmpty(BinTree BT);            // 判断树 BT 是否为空
+void PreOrderTraversal(BinTree BT);  // 先序遍历，根左右
+void InOrderTraversal(BinTree BT);   // 中序遍历，左根右
+void PostOrderTraversal(BinTree BT); // 后序遍历，左右根
+
+//插入一个节点;
+BinTree Insert(int val)
 {
-    BinTree BT;
-    BT = (BinTree)malloc(sizeof(TNode));
-    BT->Data = data;
-    BT->Left = NULL;
-    BT->Right = NULL;
-    return BT;
+    BinTree TNode = (BinTree)malloc(sizeof(TreeNode));
+    TNode->left = TNode->right = NULL;
+    TNode->data = val;
+    return TNode;
 }
-BinTree CreatBinTree() //初始化二叉树
+//判断树是否为空
+bool IsEmpty(BinTree BT)
+{
+    return BT != NULL;
+}
+
+// 初始化二叉树
+BinTree CreatBinTree()
 {
     BinTree BT;
     BT = (BinTree)malloc(sizeof(struct TreeNode));
-    BT->Data = 1;
-    BT->Left = Insert(2);
-    BT->Right = Insert(3);
-    BT->Left->Left = Insert(4);
-    BT->Left->Right = Insert(6);
-    BT->Left->Right->Left = Insert(5);
-    BT->Right->Left = Insert(7);
-    BT->Right->Right = Insert(9);
-    BT->Right->Left->Right = Insert(8);
+    BT->data = 1;
+    BT->left = Insert(2);
+    BT->right = Insert(3);
+    BT->left->left = Insert(4);
+    BT->left->right = Insert(6);
+    BT->left->right->left = Insert(5);
+    BT->right->left = Insert(7);
+    BT->right->right = Insert(9);
+    BT->right->left->right = Insert(8);
     return BT;
 }
+
 /*
                  1
                /   \
@@ -43,262 +63,255 @@ BinTree CreatBinTree() //初始化二叉树
               5      8
 */
 
-typedef struct StackNode //链栈节点定义
+// 先序非递归
+void PreOrderTraversal(BinTree BT) //路线法;
 {
-    BinTree T;
-    struct StackNode *Next;
-} StackNode, *Stack;
-Stack CreatStack() //链栈初始化；
-{
-    Stack s;
-    s = (Stack)malloc(sizeof(StackNode));
-    s->Next = NULL;
-    return s;
-}
-bool isEmpty(Stack S1) //判断栈是否为空
-{
-    if (S1->Next)
+    if (!BT)
     {
-        return true;
+        return;
     }
-    else
+    stack<BinTree> S;
+    BinTree T = BT;
+    while (T || !S.empty())
     {
-        return false;
+        while (T)
+        {
+            S.push(T);
+            T = T->left;
+        }
+        if (!S.empty())
+        {
+            T = S.top(), S.pop();
+            cout << T->data;
+            T = T->right;
+        }
     }
-}
-void Push(Stack S1, BinTree T) //入栈
-{
-    for (; S1->Next; S1 = S1->Next)
-        ;
-    Stack newS = CreatStack();
-    newS->T = T;
-    S1->Next = newS;
-    return;
-}
-BinTree Pop(Stack S1) //出栈
-{
-    Stack q = S1;
-    S1 = S1->Next;
-    for (; S1->Next; q = S1, S1 = S1->Next)
-        ;
-    BinTree T = S1->T;
-    q->Next = NULL;
-    free(S1);
-    return T;
 }
 
-// 1、非递归算法实现中序遍历
-void InOrderTraversalNo_recursive1(BinTree BT) //路线法
+// 先序非递归
+void PreOrderTraversal_Simulation(BinTree BT) //模拟法;
 {
-    if (BT)
+    if (!BT)
     {
-        BinTree T = BT;
-        BinTree stack[maxSize];
-        int top = -1;
-        while (T || top > -1)
+        return;
+    }
+    stack<BinTree> S;
+    BinTree T = BT;
+    S.push(T);
+    while (!S.empty())
+    {
+        T = S.top(), S.pop();
+        cout << T->data;
+        if (T->right)
         {
-            while (T)
+            S.push(T->right);
+        }
+        if (T->left)
+        {
+            S.push(T->left);
+        }
+    }
+}
+
+/*
+                 1
+               /   \
+              2     3
+             / \    / \
+            4   6  7   9
+               /    \
+              5      8
+*/
+
+// 中序非递归
+void InOrderTraversal(BinTree BT) //路线法;
+{
+    if (!BT)
+    {
+        return;
+    }
+    stack<BinTree> S;
+    BinTree T = BT;
+    while (T || !S.empty())
+    {
+        while (T)
+        {
+            cout << T->data;
+            S.push(T);
+            T = T->left;
+        }
+        if (!S.empty())
+        {
+            T = S.top(), S.pop();
+            T = T->right;
+        }
+    }
+}
+
+/*
+                 1
+               /   \
+              2     3
+             / \    / \
+            4   6  7   9
+               /    \
+              5      8
+*/
+
+// 后序非递归
+void PostOrderTraversal(BinTree BT) //路线法;
+{
+    if (!BT)
+    {
+        return;
+    }
+    stack<BinTree> S;
+    BinTree Pre = NULL;
+    BinTree T = BT;
+    while (T || !S.empty())
+    {
+        while (T)
+        {
+            S.push(T);
+            T = T->left;
+        }
+        if (!S.empty())
+        {
+            T = S.top(), S.pop();
+            if ((!T->right) || Pre == T->right)
             {
-                stack[++top] = T;
-                T = T->Left;
+                cout << T->data;
+                Pre = T;
+                T = NULL;
             }
-            if (top > -1)
+            else
             {
-                T = stack[top--];
-                cout << T->Data;
-                T = T->Right;
+                S.push(T);
+                T = T->right;
             }
         }
     }
 }
 
-// 2、非递归算法实现先序遍历
-void PreOrderTraversalNo_recursive1(BinTree BT) //路线法
+void PostOrderTraversal_Simulation(BinTree BT) //模拟法;
 {
-    if (BT)
+    if (!BT)
     {
-        BinTree stack[maxSize];
-        int top = -1;
-        BinTree T = BT;
-        while (T || top > -1)
+        return;
+    }
+    stack<BinTree> sta;
+    stack<BinTree> rev_sta;
+    BinTree T = BT;
+    sta.push(T);
+    while (!sta.empty())
+    {
+        T = sta.top(), sta.pop();
+        rev_sta.push(T);
+        if (T->left)
         {
-            while (T)
-            {
-                cout << T->Data;
-                stack[++top] = T;
-                T = T->Left;
-            }
-            if (top > -1)
-            {
-                T = stack[top--];
-
-                T = T->Right;
-            }
+            sta.push(T->left);
+        }
+        if (T->right)
+        {
+            sta.push(T->right);
         }
     }
-    //链栈实现
-    // BinTree T = BT;
-    // Stack S1 = CreatStack();
-    // while (T || isEmpty(S1))
-    // {
-    //     while (T)
-    //     {
-    //         cout << T->Data;
-    //         Push(S1, T);
-    //         T = T->Left;
-    //     }
-    //     if (isEmpty(S1))
-    //     {
-    //         T = Pop(S1);
-    //         T = T->Right;
-    //     }
-    // }
-}
-
-void PreOrderTraversalNo_recursive2(BinTree BT) //模拟法
-{
-    if (BT)
+    while (!rev_sta.empty())
     {
-        BinTree stack[maxSize];
-        int top = -1;
-        BinTree T = NULL;
-        stack[++top] = BT;
-        while (top > -1)
-        {
-            T = stack[top--];
-            cout << T->Data;
-            if (T->Right) //左右孩子的入栈顺序和访问顺序相反
-            {
-                stack[++top] = T->Right;
-            }
-            if (T->Left)
-            {
-                stack[++top] = T->Left;
-            }
-        }
+        cout << rev_sta.top()->data, rev_sta.pop();
     }
 }
 
-// 3、非递归算法实现后序遍历
-void PostOrderTraversalNo_recursive1(BinTree BT) //路线法
-{
-    if (BT)
-    {
-        BinTree stack[maxSize];
-        int top = -1;
-        BinTree T = BT;
-        BinTree pre = NULL;
-        while (T || top > -1)
-        {
-            while (T)
-            {
-                stack[++top] = T;
-                T = T->Left;
-            }
-            if (top > -1)
-            {
-                T = stack[top--];
-                if (!T->Right || pre == T->Right)
-                {
-                    cout << T->Data;
-                    pre = T;
-                    T = NULL;
-                }
-                else
-                {
-                    stack[++top] = T;
-                    T = T->Right;
-                }
-            }
-        }
-    }
-}
+/*
+                 1
+               /   \
+              2     3
+             / \    / \
+            4   6  7   9
+               /    \
+              5      8
+*/
 
-void PostOrderTraversalNo_recursive2(BinTree BT) //模拟法+逆后续
-{
-    if (BT)
-    {
-        BinTree stack[maxSize];
-        int top = -1;
-        BinTree ReverseStack[maxSize];
-        int ReverseTop = -1;
-        BinTree T;
-        stack[++top] = BT;
-        while (top > -1)
-        {
-            T = stack[top--];
-            ReverseStack[++ReverseTop] = T;
-            if (T->Left)
-            {
-                stack[++top] = T->Left;
-            }
-            if (T->Right)
-            {
-                stack[++top] = T->Right;
-            }
-        }
-        while (ReverseTop > -1)
-        {
-            cout << ReverseStack[ReverseTop--]->Data;
-        }
-    }
-}
-
-// 4、层次遍历
+// 层次遍历
 void LevelOrderTraversal(BinTree BT)
 {
     if (!BT)
     {
         return;
     }
-    BinTree queue[maxSize];
-    int front = 0, rear = 0;
+    queue<BinTree> que;
     BinTree T = BT;
-    rear = (rear + 1) % maxSize;
-    queue[rear] = T;
-    while (rear != front)
+    que.push(T);
+    while (!que.empty())
     {
-        front = (front + 1) % maxSize;
-        T = queue[front];
-        cout << T->Data;
-        if (T->Left)
+        T = que.front(), que.pop();
+        cout << T->data;
+        if (T->left)
         {
-            rear = (rear + 1) % maxSize;
-            queue[rear] = T->Left;
+            que.push(T->left);
         }
-        if (T->Right)
+        if (T->right)
         {
-            rear = (rear + 1) % maxSize;
-            queue[rear] = T->Right;
+            que.push(T->right);
         }
     }
 }
 
+/*
+                 1
+               /   \
+              2     3
+             / \    / \
+            4   6  7   9
+               /    \
+              5      8
+*/
+
+// 输出叶子结点
+void FindLeaves(BinTree BT)
+{
+    if (!BT)
+    {
+        return;
+    }
+    if (!BT->left && !BT->right)
+    {
+        cout << BT->data;
+    }
+    FindLeaves(BT->left);
+    FindLeaves(BT->right);
+}
+
+// 求树高度
+int GetHeight(BinTree BT)
+{
+    if (!BT)
+    {
+        return 0;
+    }
+    int leftH = GetHeight(BT->left);
+    int rightH = GetHeight(BT->right);
+    return leftH > rightH ? leftH + 1 : rightH + 1;
+}
+
 int main()
 {
-    BinTree bt = CreatBinTree();
-    cout << "\nInOrderRraversal(route method):" << endl;
-    InOrderTraversalNo_recursive1(bt);
-    cout << endl
-         << "simulation method isn't suitable for InOrderTraversal";
-    cout << endl
-         << endl
-         << "PreOrderTraversal(route method):" << endl;
-    PreOrderTraversalNo_recursive1(bt);
-    cout << endl
-         << "PreOrderTraversal(simulation method):" << endl;
-    PreOrderTraversalNo_recursive2(bt);
-    cout << endl
-         << endl
-         << "PostOrderTraversal(route method - single stack):" << endl;
-    PostOrderTraversalNo_recursive1(bt);
-    cout << endl
-         << "PostOrderTraversal(simulation method + double stack):" << endl;
-    PostOrderTraversalNo_recursive2(bt); //逆后续
-    cout << endl
-         << endl
-         << "LevelOrderTraversal(Queue):" << endl;
-    LevelOrderTraversal(bt);
-
+    BinTree BT;
+    BT = CreatBinTree();
+    cout << "PreOTra: ";
+    PreOrderTraversal(BT);
+    cout << "\nInOrTra: ";
+    PreOrderTraversal_Simulation(BT);
+    cout << "\nInSiTra: ";
+    InOrderTraversal(BT);
+    cout << "\nPostTra: ";
+    PostOrderTraversal(BT);
+    cout << "\nPoSiTra: ";
+    PostOrderTraversal_Simulation(BT);
+    cout << "\nLevTra: ";
+    LevelOrderTraversal(BT);
+    cout << "\nListLeaves: ";
+    FindLeaves(BT);
+    cout << "\nPutHeight: " << GetHeight(BT);
     return 0;
 }
