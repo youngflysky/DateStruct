@@ -30,11 +30,6 @@ BinTree Insert(int val)
     TNode->data = val;
     return TNode;
 }
-//判断树是否为空
-bool IsEmpty(BinTree BT)
-{
-    return BT != NULL;
-}
 
 // 初始化二叉树
 BinTree CreatBinTree()
