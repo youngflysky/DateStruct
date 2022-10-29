@@ -1,3 +1,4 @@
+// TITLE: 最大子列和问题-贪心算法
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
