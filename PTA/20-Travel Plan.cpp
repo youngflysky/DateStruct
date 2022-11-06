@@ -23,13 +23,13 @@ typedef struct GraphVal
 } GraphVal;
 GraphVal G[MaxSzie][MaxSzie]; // README:矩阵的一对坐标队定位一条边;
 
-int dist[MaxSzie], price[MaxSzie];
+int Dist[MaxSzie], Price[MaxSzie];
 bool collected[MaxSzie];
 void Inite_dist_path_collected()
 {
     for (int i = 0; i < Nv; ++i)
     {
-        dist[i] = price[i] = INF;
+        Dist[i] = Price[i] = INF;
 
         collected[i] = false;
     }
@@ -49,8 +49,8 @@ void Dijkstra(int s) // NOTE:Dijkstra:单源有权图最短路径算法;
 {
     Inite_dist_path_collected();
 
-    dist[s] = 0;  // NOTE:主权;
-    price[s] = 0; // NOTE:副权
+    Dist[s] = 0;  // NOTE:主权;
+    Price[s] = 0; // NOTE:副权
 
     int minE;
     int v;
@@ -59,9 +59,9 @@ void Dijkstra(int s) // NOTE:Dijkstra:单源有权图最短路径算法;
         minE = INF;
         for (int i = 0; i < Nv; ++i)
         {
-            if (!collected[i] && dist[i] < minE)
+            if (!collected[i] && Dist[i] < minE)
             {
-                minE = dist[i];
+                minE = Dist[i];
                 v = i;
             }
         }
@@ -75,14 +75,14 @@ void Dijkstra(int s) // NOTE:Dijkstra:单源有权图最短路径算法;
         {
             if (!collected[w] && G[v][w].dist < INF)
             {
-                if (dist[w] > dist[v] + G[v][w].dist)
+                if (Dist[w] > Dist[v] + G[v][w].dist)
                 {
-                    dist[w] = dist[v] + G[v][w].dist;
-                    price[w] = price[v] + G[v][w].price;
+                    Dist[w] = Dist[v] + G[v][w].dist;
+                    Price[w] = Price[v] + G[v][w].price;
                 }
-                else if (dist[w] == dist[v] + G[v][w].dist && price[w] > price[v] + G[v][w].price)
+                else if (Dist[w] == Dist[v] + G[v][w].dist && Price[w] > Price[v] + G[v][w].price)
                 {
-                    price[w] = price[v] + G[v][w].price;
+                    Price[w] = Price[v] + G[v][w].price;
                 }
             }
         }
@@ -92,7 +92,7 @@ void Dijkstra(int s) // NOTE:Dijkstra:单源有权图最短路径算法;
 void TravelPlan()
 {
     Dijkstra(S);
-    cout << dist[D] << ' ' << price[D];
+    cout << Dist[D] << ' ' << Price[D];
 }
 
 int main()
